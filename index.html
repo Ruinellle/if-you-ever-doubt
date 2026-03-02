@@ -3,42 +3,44 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Marauder’s Map | If you ever doubt</title>
+  <title>Marauder’s Map | Lumos Veritas</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=IM+Fell+English:ital@0;1;0&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=IM+Fell+English:ital@0;1&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- GATE: Closed Map -->
+  <!-- AUDIO (you provide the file) -->
+  <audio id="bgAudio" preload="auto" loop>
+    <source src="assets/audio/ambient.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- GATE -->
   <div class="gate" id="gate" aria-hidden="false">
     <div class="closed-map" id="closedMap">
-      <div class="closed-seal">
+      <div class="seal">
         <div class="seal-ring"></div>
-        <div class="seal-text">Marauder’s Map</div>
+        <div class="seal-title">Marauder’s Map</div>
       </div>
 
       <div class="gate-copy">
-        <h1 class="gate-title">A map that only opens for the honest.</h1>
-        <p class="gate-sub">Write the oath to unfold it.</p>
+        <h1 class="gate-title">A map that opens to the right spell.</h1>
+        <p class="gate-sub">Cast it.</p>
 
         <div class="gate-row">
-          <input id="spellInput" class="gate-input" placeholder='Type: I solemnly swear that I am up to no good' autocomplete="off" />
+          <input id="spellInput" class="gate-input" placeholder="Cast your spell..." autocomplete="off" />
           <button id="castBtn" class="gate-btn">Cast</button>
         </div>
-
-        <p class="gate-hint">
-          Hint: <span class="hint-ink">I solemnly swear that I am up to no good</span>
-        </p>
 
         <p class="gate-error" id="gateError" aria-live="polite"></p>
       </div>
     </div>
 
     <div class="gate-sparks" id="gateSparks" aria-hidden="true"></div>
+    <div class="gate-blackout" id="gateBlackout" aria-hidden="true"></div>
   </div>
 
   <!-- MAIN MAP -->
@@ -52,31 +54,26 @@
     <div class="corner bl"></div>
     <div class="corner br"></div>
 
-    <!-- Ink-drawing overlay -->
+    <!-- Ink drawing overlay -->
     <svg class="ink-map" id="inkMap" viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">
       <path class="ink-path" d="M60,120 C220,40 360,40 520,120 C680,200 820,180 940,120" />
       <path class="ink-path" d="M90,610 C180,520 260,520 340,610 C420,700 580,690 660,610 C740,530 820,530 910,610" />
       <path class="ink-path" d="M160,210 C220,260 260,320 240,380 C220,450 280,500 350,470" />
       <path class="ink-path" d="M820,220 C760,270 730,320 760,380 C790,450 740,500 660,470" />
       <path class="ink-path" d="M460,250 C520,280 560,340 520,390 C480,440 520,520 610,520" />
-      <path class="ink-path" d="M420,430 C360,460 330,520 360,560 C390,600 460,600 500,560" />
       <path class="ink-path thin" d="M100,340 L220,340 L220,470 L100,470 Z" />
       <path class="ink-path thin" d="M780,340 L900,340 L900,470 L780,470 Z" />
-      <path class="ink-path thin" d="M470,150 L530,150 L530,210 L470,210 Z" />
-      <text class="ink-label" x="70" y="105">Hogsmeade-ish Corner</text>
-      <text class="ink-label" x="740" y="105">Forbidden-ish Corner</text>
-      <text class="ink-label" x="445" y="135">Great-ish Hall</text>
+      <text class="ink-label" x="70" y="105">Lumos Veritas</text>
+      <text class="ink-label" x="735" y="105">Keep it gentle.</text>
     </svg>
 
-    <!-- Cursor trail layers -->
+    <!-- Layers -->
     <div id="trailLayer" class="trail-layer" aria-hidden="true"></div>
     <div id="sparkLayer" class="spark-layer" aria-hidden="true"></div>
-
-    <!-- Spell effects layer -->
     <div id="spellLayer" class="spell-layer" aria-hidden="true"></div>
 
     <header class="top">
-      <!-- Houses bar -->
+      <!-- Houses -->
       <div class="houses">
         <button class="house gryff" data-spell="Incendio" aria-label="Gryffindor">
           <span class="crest" aria-hidden="true"></span>
@@ -106,20 +103,14 @@
         <span class="title-icons">💙🫂</span>
       </h1>
 
-      <p class="subtitle">
-        Not a trap. Not a test. Just truth on parchment.
-      </p>
+      <p class="subtitle">Truth on parchment, not noise in the air.</p>
 
       <div class="actions">
         <button class="btn" id="openLetter">📜 March Letter</button>
-        <a class="btn ghost" href="#memories">🗺 Dikrayaaaat…</a>
+        <button class="btn ghost" id="toggleAudio">🔊 Sound</button>
       </div>
 
       <p class="tiny" id="dateLine"></p>
-
-      <div class="oath">
-        <span class="oath-ink">I solemnly swear that I am up to no good…</span>
-      </div>
     </header>
 
     <main class="wrap">
@@ -170,99 +161,102 @@
           </p>
 
           <p class="sig">
-            <span class="sigline">Always choosing honesty over silence.</span><br>
-            <span class="signame">— Malak</span>
+            <span class="sigline">— Malak</span>
           </p>
         </div>
       </section>
 
-      <!-- MEMORIES -->
-      <section class="panel" id="memories">
+      <!-- DIKRAYAAAT SLIDESHOW -->
+      <section class="panel" id="dikrayaat">
         <div class="panel-head">
           <h2>Dikrayaaaat…</h2>
-          <span class="tag">Timeline</span>
+          <span class="tag">Slideshow</span>
         </div>
 
-        <div class="timeline">
-          <div class="titem">
-            <div class="tmark"></div>
-            <div class="ttext">
-              <h3>That Summer ✨</h3>
-              <p>June 10 — awel nhar. Everything felt new and unreachable but you made it seem mout sahla hhh 💫</p>
-            </div>
+        <div class="slideshow" id="slideshow">
+          <div class="slides">
+            <figure class="slide" data-pop="Twehechteek.">
+              <img src="assets/photos/01.jpeg" alt="Memory 01" />
+              <figcaption>✨</figcaption>
+            </figure>
+
+            <figure class="slide" data-pop="twehecht nl3eb f che3rek.">
+              <img src="assets/photos/02.jpeg" alt="Memory 02" />
+              <figcaption>✨</figcaption>
+            </figure>
+
+            <figure class="slide" data-pop="Ndirou chi glisa bhal hadi imta? .">
+              <img src="assets/photos/03.jpeg" alt="Memory 03" />
+              <figcaption>✨</figcaption>
+            </figure>
+
+            <figure class="slide" data-pop="I miss these moments...">
+              <img src="assets/photos/04.jpeg" alt="Memory 04" />
+              <figcaption>✨</figcaption>
+            </figure>
+
+            <figure class="slide" data-pop="Waaaa chhal ghzal uwu.">
+              <img src="assets/photos/05.jpeg" alt="Memory 05" />
+              <figcaption>✨</figcaption>
+            </figure>
+
+            <figure class="slide" data-pop="3iniiiik :3.">
+              <img src="assets/photos/06.jpeg" alt="Memory 06" />
+              <figcaption>✨</figcaption>
+            </figure>
           </div>
 
-          <div class="titem">
-            <div class="tmark"></div>
-            <div class="ttext">
-              <h3>The drifting 🌧</h3>
-              <p>Not from lack of love but from fear and storms that were eating me inside 🌊</p>
-            </div>
-          </div>
+          <button class="nav prev" id="prevSlide" aria-label="Previous">‹</button>
+          <button class="nav next" id="nextSlide" aria-label="Next">›</button>
 
-          <div class="titem">
-            <div class="tmark"></div>
-            <div class="ttext">
-              <h3>The honesty 🫀</h3>
-              <p>
-                I missed u and i miss you and i will ! this is the fact i know .
-                ou 3arfak hta nta you feel the same ! ✨💙🫂
-                <span class="blink">✦</span>
-              </p>
-            </div>
-          </div>
+          <div class="dots" id="dots" aria-hidden="true"></div>
+          <div class="pop" id="pop" aria-hidden="true"></div>
         </div>
       </section>
 
-      <!-- GALLERY -->
-      <section class="panel" id="gallery">
-        <div class="panel-head">
-          <h2>Gallery</h2>
-          <span class="tag">6 photos</span>
-        </div>
-
-        <div class="grid">
-          <figure class="ph"><img src="assets/photos/01.jpeg" alt="Memory 01" loading="lazy"></figure>
-          <figure class="ph"><img src="assets/photos/02.jpeg" alt="Memory 02" loading="lazy"></figure>
-          <figure class="ph"><img src="assets/photos/03.jpeg" alt="Memory 03" loading="lazy"></figure>
-          <figure class="ph"><img src="assets/photos/04.jpeg" alt="Memory 04" loading="lazy"></figure>
-          <figure class="ph"><img src="assets/photos/05.jpeg" alt="Memory 05" loading="lazy"></figure>
-          <figure class="ph"><img src="assets/photos/06.jpeg" alt="Memory 06" loading="lazy"></figure>
-        </div>
-      </section>
-
-      <!-- TIME CAPSULE -->
+      <!-- SMALL LETTERS -->
       <section class="panel" id="capsule">
         <div class="panel-head">
-          <h2>Time Capsule</h2>
-          <span class="tag">Letters</span>
+          <h2>Small Letters</h2>
+          <span class="tag">6</span>
         </div>
 
-        <p class="muted">Hadou lik… hel koula whda mli thess brask 🤍</p>
+        <p class="muted">Koul wa7da hiya wara9a sghira… 7ellha mlli thess brask 🤍</p>
 
         <div class="caps">
-          <button class="cap" data-open="angry">When you’re angry</button>
-          <button class="cap" data-open="miss">When you miss me</button>
-          <button class="cap" data-open="tired">When you’re tired</button>
-          <button class="cap" data-open="ramadan">Ramadan</button>
-        </div>
-
-        <div class="modal" id="modal" aria-hidden="true">
-          <div class="modalCard">
-            <button class="close" id="closeModal" aria-label="Close">✕</button>
-            <h3 id="modalTitle"></h3>
-            <div id="modalBody" class="modalBody"></div>
-            <p class="tiny muted endline">Mischief managed. 🗝</p>
-          </div>
+          <button class="cap" data-key="angry">mli tkoun m3eseb</button>
+          <button class="cap" data-key="anx">mli tkoun mn9ele9</button>
+          <button class="cap" data-key="tired">mli tkoun 3yaan</button>
+          <button class="cap" data-key="happy">mli tkoun frhan</button>
+          <button class="cap" data-key="miss">mli twehechni</button>
+          <button class="cap" data-key="nomore">mli matb9ach katbghini</button>
         </div>
       </section>
 
       <footer class="footer">
         <button class="manage" id="manageBtn">Mischief Managed</button>
-        <p class="tiny muted">…but gently.</p>
       </footer>
 
     </main>
+  </div>
+
+  <!-- LETTER MODAL (envelope animation) -->
+  <div class="letter-modal" id="letterModal" aria-hidden="true">
+    <div class="letter-stage">
+      <button class="letter-close" id="letterClose" aria-label="Close">✕</button>
+
+      <div class="envelope" id="envelope">
+        <div class="env-back"></div>
+        <div class="env-front"></div>
+        <div class="env-flap" id="envFlap"></div>
+
+        <div class="paper" id="paper">
+          <h3 id="paperTitle"></h3>
+          <div class="paperBody" id="paperBody"></div>
+          <div class="paperSig">— Malak</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="script.js"></script>
