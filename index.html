@@ -46,7 +46,14 @@
   <!-- MAIN MAP -->
   <div class="map" id="map" aria-hidden="true">
     <div class="paper-noise"></div>
+
+    <!-- soft ambience -->
     <div class="candles" aria-hidden="true"></div>
+
+    <!-- candles along the sides (all the way down) -->
+    <div class="side-candles left" aria-hidden="true"></div>
+    <div class="side-candles right" aria-hidden="true"></div>
+
     <div class="vignette"></div>
 
     <!-- Gryffindor-ish corners -->
@@ -74,26 +81,24 @@
     <div id="spellLayer" class="spell-layer" aria-hidden="true"></div>
 
     <header class="top">
-      <!-- Houses (upload these files) -->
-      <!-- Put in: assets/houses/gryff.png, slyth.png, huff.png, raven.png -->
       <div class="houses">
         <button class="house gryff" data-spell="Incendio" aria-label="Gryffindor">
-          <img class="crestImg" src="assets/houses/gryff.png" alt="" aria-hidden="true">
+          <img class="crestImg" src="assets/houses/gryff.png?v=3" alt="" aria-hidden="true">
           <span class="house-name">Gryffindor</span>
         </button>
 
         <button class="house slyth" data-spell="Serpensortia" aria-label="Slytherin">
-          <img class="crestImg" src="assets/houses/slyth.png" alt="" aria-hidden="true">
+          <img class="crestImg" src="assets/houses/slyth.png?v=3" alt="" aria-hidden="true">
           <span class="house-name">Slytherin</span>
         </button>
 
         <button class="house huff" data-spell="Protego" aria-label="Hufflepuff">
-          <img class="crestImg" src="assets/houses/huff.png" alt="" aria-hidden="true">
+          <img class="crestImg" src="assets/houses/huff.png?v=3" alt="" aria-hidden="true">
           <span class="house-name">Hufflepuff</span>
         </button>
 
         <button class="house raven" data-spell="Lumos" aria-label="Ravenclaw">
-          <img class="crestImg" src="assets/houses/raven.png" alt="" aria-hidden="true">
+          <img class="crestImg" src="assets/houses/raven.png?v=3" alt="" aria-hidden="true">
           <span class="house-name">Ravenclaw</span>
         </button>
       </div>
