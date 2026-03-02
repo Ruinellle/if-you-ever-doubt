@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>If you ever doubt</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#0b0f1a" />
+</head>
+<body>
+  <div class="grain"></div>
+
+  <header class="hero">
+    <p class="kicker">A small page you can return to</p>
+    <h1>If you ever doubt…</h1>
+    <p class="sub">
+      This is not to pressure you. It’s just something true, written calmly.
+    </p>
+    <div class="cta">
+      <button class="btn" id="openLetter">Open the letter</button>
+      <a class="btn ghost" href="#memories">Go to memories</a>
+    </div>
+    <p class="tiny" id="dateLine"></p>
+  </header>
+
+  <main class="wrap">
+    <section class="card" id="letter">
+      <h2>Letter</h2>
+      <p>
+        I know the last weeks have felt confusing and heavy. I didn’t disappear because I stopped caring.
+        I disappeared because my health pulled me under, and I didn’t know how to speak while drowning.
+      </p>
+      <p>
+        What I want you to know is simple: my intention toward you stayed clean. Even when my life looked messy.
+        Even when I was afraid you’d be tired of hearing “hospital” again.
+      </p>
+      <p>
+        I’m not asking you to fix this instantly. I’m asking you to understand the difference between
+        <span class="highlight">absence</span> and <span class="highlight">indifference</span>.
+      </p>
+      <p class="signature">
+        Always with respect, <br />
+        <span class="sig">— Malak</span>
+      </p>
+    </section>
+
+    <section class="card" id="memories">
+      <h2>Memories</h2>
+      <p class="muted">A few moments I keep gently, like bookmarks.</p>
+
+      <div class="timeline">
+        <div class="titem">
+          <div class="dot"></div>
+          <div>
+            <h3>That summer</h3>
+            <p>When everything felt light, and the future felt close.</p>
+          </div>
+        </div>
+        <div class="titem">
+          <div class="dot"></div>
+          <div>
+            <h3>The drifting</h3>
+            <p>Not from lack of love. From storms I didn’t know how to explain.</p>
+          </div>
+        </div>
+        <div class="titem">
+          <div class="dot"></div>
+          <div>
+            <h3>The return</h3>
+            <p>When we said the honest part out loud: we missed each other.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="gallery">
+      <h2>Gallery</h2>
+      <p class="muted">Only what you’re comfortable seeing.</p>
+
+      <div class="grid">
+        <figure class="ph">
+          <img src="assets/photos/01.jpg" alt="Memory photo 1" loading="lazy" />
+        </figure>
+        <figure class="ph">
+          <img src="assets/photos/02.jpg" alt="Memory photo 2" loading="lazy" />
+        </figure>
+        <figure class="ph">
+          <img src="assets/photos/03.jpg" alt="Memory photo 3" loading="lazy" />
+        </figure>
+      </div>
+
+      <p class="tiny muted">
+        If an image doesn’t load, check the file name (01.jpg, 02.jpg…) and the folder path.
+      </p>
+    </section>
+
+    <section class="card" id="capsule">
+      <h2>Time capsule</h2>
+      <p class="muted">Open one depending on what you feel.</p>
+
+      <div class="caps">
+        <button class="cap" data-open="angry">When you’re angry</button>
+        <button class="cap" data-open="miss">When you miss me</button>
+        <button class="cap" data-open="tired">When you’re tired</button>
+        <button class="cap" data-open="ramadan">Ramadan</button>
+      </div>
+
+      <div class="modal" id="modal" aria-hidden="true">
+        <div class="modalCard">
+          <button class="close" id="closeModal" aria-label="Close">✕</button>
+          <h3 id="modalTitle"></h3>
+          <div id="modalBody" class="modalBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p class="tiny muted">Made with sincerity, not perfection.</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
