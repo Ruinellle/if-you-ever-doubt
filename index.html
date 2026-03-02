@@ -3,27 +3,100 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>If you ever doubt | Marauder’s Map</title>
+  <title>Marauder’s Map | If you ever doubt</title>
 
-  <!-- Hogwarts-ish fonts (free, web-safe via Google Fonts) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=IM+Fell+English:ital@0;1&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=IM+Fell+English:ital@0;1;0&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <div class="map">
+
+  <!-- GATE: Closed Map -->
+  <div class="gate" id="gate" aria-hidden="false">
+    <div class="closed-map" id="closedMap">
+      <div class="closed-seal">
+        <div class="seal-ring"></div>
+        <div class="seal-text">Marauder’s Map</div>
+      </div>
+
+      <div class="gate-copy">
+        <h1 class="gate-title">A map that only opens for the honest.</h1>
+        <p class="gate-sub">Write the oath to unfold it.</p>
+
+        <div class="gate-row">
+          <input id="spellInput" class="gate-input" placeholder='Type: I solemnly swear that I am up to no good' autocomplete="off" />
+          <button id="castBtn" class="gate-btn">Cast</button>
+        </div>
+
+        <p class="gate-hint">
+          Hint: <span class="hint-ink">I solemnly swear that I am up to no good</span>
+        </p>
+
+        <p class="gate-error" id="gateError" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <div class="gate-sparks" id="gateSparks" aria-hidden="true"></div>
+  </div>
+
+  <!-- MAIN MAP -->
+  <div class="map" id="map" aria-hidden="true">
     <div class="paper-noise"></div>
     <div class="vignette"></div>
 
-    <!-- Footprints layer (JS will animate these) -->
-    <div id="footprintsLayer" class="footprints-layer" aria-hidden="true"></div>
+    <!-- Gryffindor-ish corners -->
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <!-- Ink-drawing overlay -->
+    <svg class="ink-map" id="inkMap" viewBox="0 0 1000 700" preserveAspectRatio="none" aria-hidden="true">
+      <path class="ink-path" d="M60,120 C220,40 360,40 520,120 C680,200 820,180 940,120" />
+      <path class="ink-path" d="M90,610 C180,520 260,520 340,610 C420,700 580,690 660,610 C740,530 820,530 910,610" />
+      <path class="ink-path" d="M160,210 C220,260 260,320 240,380 C220,450 280,500 350,470" />
+      <path class="ink-path" d="M820,220 C760,270 730,320 760,380 C790,450 740,500 660,470" />
+      <path class="ink-path" d="M460,250 C520,280 560,340 520,390 C480,440 520,520 610,520" />
+      <path class="ink-path" d="M420,430 C360,460 330,520 360,560 C390,600 460,600 500,560" />
+      <path class="ink-path thin" d="M100,340 L220,340 L220,470 L100,470 Z" />
+      <path class="ink-path thin" d="M780,340 L900,340 L900,470 L780,470 Z" />
+      <path class="ink-path thin" d="M470,150 L530,150 L530,210 L470,210 Z" />
+      <text class="ink-label" x="70" y="105">Hogsmeade-ish Corner</text>
+      <text class="ink-label" x="740" y="105">Forbidden-ish Corner</text>
+      <text class="ink-label" x="445" y="135">Great-ish Hall</text>
+    </svg>
+
+    <!-- Cursor trail layers -->
+    <div id="trailLayer" class="trail-layer" aria-hidden="true"></div>
+    <div id="sparkLayer" class="spark-layer" aria-hidden="true"></div>
+
+    <!-- Spell effects layer -->
+    <div id="spellLayer" class="spell-layer" aria-hidden="true"></div>
 
     <header class="top">
-      <div class="wax">
-        <span class="wax-dot"></span>
+      <!-- Houses bar -->
+      <div class="houses">
+        <button class="house gryff" data-spell="Incendio" aria-label="Gryffindor">
+          <span class="crest" aria-hidden="true"></span>
+          <span class="house-name">Gryffindor</span>
+        </button>
+
+        <button class="house slyth" data-spell="Serpensortia" aria-label="Slytherin">
+          <span class="crest" aria-hidden="true"></span>
+          <span class="house-name">Slytherin</span>
+        </button>
+
+        <button class="house huff" data-spell="Protego" aria-label="Hufflepuff">
+          <span class="crest" aria-hidden="true"></span>
+          <span class="house-name">Hufflepuff</span>
+        </button>
+
+        <button class="house raven" data-spell="Lumos" aria-label="Ravenclaw">
+          <span class="crest" aria-hidden="true"></span>
+          <span class="house-name">Ravenclaw</span>
+        </button>
       </div>
 
       <p class="kicker">Marauder’s Map Edition</p>
@@ -34,7 +107,7 @@
       </h1>
 
       <p class="subtitle">
-        Not a spell. Not a trap. Just truth written on parchment.
+        Not a trap. Not a test. Just truth on parchment.
       </p>
 
       <div class="actions">
@@ -62,9 +135,8 @@
           <p>
             Wa Oussamaaaa 🤍 ! i know the last few weeks have been heavy ou confusing.
             3rfti flw9ita li mredt fiha , machi mli jatni lhala walakin...
-            mli bdit kanred rasi z3ma, knt kanfkr ou tangoul maybe the best thing hia
-            mli mab9it kanhdr m3a hta wahed hit fin knt kanrj3 nchouf li swl kanl9a
-            koulchi kayshablih makntch bagha nhdr ou safi ...
+            mli bdit kanred rasi z3ma, knt kanfkr ou tangoul maybe the best thing hia mli mab9it kanhdr m3a hta wahed
+            hit fin knt kanrj3 nchouf li swl kanl9a koulchi kayshablih makntch bagha nhdr ou safi ...
           </p>
 
           <p>
@@ -82,8 +154,7 @@
 
           <p>
             i know bli i got accustomed to you, your presence and the thought of US..
-            Ana 3arfa chhal khayb lwahed maykounch 9ader ythekem f chi haja wla f lm3louma
-            ou kifach o imta twslou.
+            Ana 3arfa chhal khayb lwahed maykounch 9ader ythekem f chi haja wla f lm3louma ou kifach o imta twslou.
           </p>
 
           <p>
@@ -150,8 +221,6 @@
           <span class="tag">6 photos</span>
         </div>
 
-        <p class="muted">Keep them as <b>01.jpg</b> → <b>06.jpg</b> inside <code>assets/photos/</code>.</p>
-
         <div class="grid">
           <figure class="ph"><img src="assets/photos/01.jpeg" alt="Memory 01" loading="lazy"></figure>
           <figure class="ph"><img src="assets/photos/02.jpeg" alt="Memory 02" loading="lazy"></figure>
@@ -189,7 +258,8 @@
       </section>
 
       <footer class="footer">
-        <p class="tiny muted">Mischief managed… but gently.</p>
+        <button class="manage" id="manageBtn">Mischief Managed</button>
+        <p class="tiny muted">…but gently.</p>
       </footer>
 
     </main>
