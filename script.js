@@ -32,6 +32,16 @@ const toggleAudio = document.getElementById("toggleAudio");
 
 const manageBtn = document.getElementById("manageBtn");
 
+// train pop
+const trainPop = document.getElementById("trainPop");
+
+// letter modal
+const letterModal = document.getElementById("letterModal");
+const letterClose = document.getElementById("letterClose");
+const envelope = document.getElementById("envelope");
+const paperTitle = document.getElementById("paperTitle");
+const paperBody = document.getElementById("paperBody");
+
 // ---------- settings ----------
 const SPELL = norm("Lumos Veritas");
 
@@ -132,7 +142,7 @@ document.getElementById("openLetter").addEventListener("click", ()=>{
   document.getElementById("letter").scrollIntoView({behavior:"smooth"});
 });
 
-// ---------- cursor trail (footsteps + names) ----------
+// ---------- cursor trail (footsteps + name every 5s) ----------
 function footprintSVG(){
   return `
   <svg viewBox="0 0 40 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -147,18 +157,28 @@ function footprintSVG(){
 
 let last = {x:0,y:0,t:0};
 let step = 0;
-const labelText = "Malak ✦ Oussama";
+const labelText = "Oussama";
+let lastNameStamp = 0; // show name every 5s
 
 function spawnStep(x,y,angleDeg){
+  const now = performance.now();
+  const showName = (now - lastNameStamp) >= 5000;
+
   const el=document.createElement("div");
   el.className="step";
+
   const side = (step % 2 === 0) ? -10 : 10;
   el.style.left = `${x + side}px`;
   el.style.top  = `${y}px`;
   el.style.setProperty("--rot", `${angleDeg}deg`);
   el.style.transform = `rotate(${angleDeg}deg)`;
-  el.innerHTML = `${footprintSVG()}<div class="label">${labelText}</div>`;
+
+  el.innerHTML = `${footprintSVG()}${showName ? `<div class="label">${labelText}</div>` : ""}`;
+
   trailLayer.appendChild(el);
+
+  if (showName) lastNameStamp = now;
+
   setTimeout(()=> el.remove(), 2500);
 }
 
@@ -220,61 +240,18 @@ document.querySelectorAll(".house").forEach(btn=>{
   });
 });
 
-// ---------- slideshow ----------
-const slidesEl = document.querySelector(".slides");
-const slideEls = Array.from(document.querySelectorAll(".slide"));
-const prevBtn = document.getElementById("prevSlide");
-const nextBtn = document.getElementById("nextSlide");
-const dotsEl  = document.getElementById("dots");
-const popEl   = document.getElementById("pop");
-
-let idx = 0;
-let autoTimer = null;
-
-function renderDots(){
-  dotsEl.innerHTML = "";
-  slideEls.forEach((_,i)=>{
-    const d=document.createElement("div");
-    d.className = "dot" + (i===idx ? " on" : "");
-    dotsEl.appendChild(d);
-  });
-}
-function goTo(i){
-  idx = (i + slideEls.length) % slideEls.length;
-  slidesEl.style.transform = `translateX(${-idx * 100}%)`;
-  renderDots();
-}
-function startAuto(){
-  stopAuto();
-  autoTimer = setInterval(()=> goTo(idx+1), 4200);
-}
-function stopAuto(){
-  if(autoTimer) clearInterval(autoTimer);
-  autoTimer = null;
-}
-prevBtn.addEventListener("click", ()=> { goTo(idx-1); startAuto(); });
-nextBtn.addEventListener("click", ()=> { goTo(idx+1); startAuto(); });
-
-slideEls.forEach((slide)=>{
-  slide.addEventListener("mouseenter", ()=>{
-    const msg = slide.dataset.pop || "";
-    popEl.textContent = msg;
-    popEl.classList.remove("show");
-    void popEl.offsetWidth; // restart animation
-    popEl.classList.add("show");
+// ---------- photo train hover pop ----------
+document.querySelectorAll(".car").forEach(car => {
+  car.addEventListener("mouseenter", () => {
+    const msg = car.dataset.pop || "";
+    trainPop.textContent = msg;
+    trainPop.classList.remove("show");
+    void trainPop.offsetWidth;
+    trainPop.classList.add("show");
   });
 });
 
-goTo(0);
-startAuto();
-
 // ---------- envelope letter modal ----------
-const letterModal = document.getElementById("letterModal");
-const letterClose = document.getElementById("letterClose");
-const envelope = document.getElementById("envelope");
-const paperTitle = document.getElementById("paperTitle");
-const paperBody = document.getElementById("paperBody");
-
 const letterContent = {
   angry: {
     title: "mli tkoun m3eseb",
@@ -284,8 +261,7 @@ ps. tghoubicha makatjich m3ak 3winatk zwinin mli kadhek !!`
   },
   anx: {
     title: "mli tkoun mn9ele9",
-    body: `If we disagree on something , know bli i still choose you!
-don't let one moment earse everything else 3afak...
+    body: `If we disagree on something , know bli i still choose you! don't let one moment earse everything else 3afak...
 I will do my best to stick by your side and build even more in the future insha'Allah`
   },
   tired: {
@@ -306,9 +282,7 @@ ps. Dir wahd 5 minutes breathing ghmed 3inik ou tnefes b chwiya , dir relaunch ,
   },
   miss: {
     title: "mli twehechni",
-    body: `Hta Ana twehechtek. twehecht rihtek..
-ou feeling your shoulder next to mine..
-ntla9aw?`
+    body: `Hta Ana twehechtek. twehecht rihtek.. ou feeling your shoulder next to mine.. ntla9aw?`
   },
   nomore: {
     title: "mli matb9ach katbghini",
@@ -325,7 +299,6 @@ function openLetter(key){
 
   letterModal.setAttribute("aria-hidden","false");
   envelope.classList.remove("open");
-  // small delay so CSS transitions trigger nicely
   setTimeout(()=> envelope.classList.add("open"), 40);
 }
 
@@ -352,7 +325,6 @@ manageBtn.addEventListener("click", ()=>{
 
   map.classList.add("closing");
   setTimeout(()=>{
-    // stop audio
     bgAudio.pause();
 
     map.setAttribute("aria-hidden","true");
