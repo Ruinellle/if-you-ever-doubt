@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Marauder’s Map | Lumos Veritas</title>
+  <title>Malak’s Map | Lumos Veritas</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
     <div class="closed-map" id="closedMap">
       <div class="seal">
         <div class="seal-ring"></div>
-        <div class="seal-title">Marauder’s Map</div>
+        <div class="seal-title">Malak’s Map</div>
       </div>
 
       <div class="gate-copy">
@@ -46,6 +46,7 @@
   <!-- MAIN MAP -->
   <div class="map" id="map" aria-hidden="true">
     <div class="paper-noise"></div>
+    <div class="candles" aria-hidden="true"></div>
     <div class="vignette"></div>
 
     <!-- Gryffindor-ish corners -->
@@ -73,25 +74,26 @@
     <div id="spellLayer" class="spell-layer" aria-hidden="true"></div>
 
     <header class="top">
-      <!-- Houses -->
+      <!-- Houses (upload these files) -->
+      <!-- Put in: assets/houses/gryff.png, slyth.png, huff.png, raven.png -->
       <div class="houses">
         <button class="house gryff" data-spell="Incendio" aria-label="Gryffindor">
-          <span class="crest" aria-hidden="true"></span>
+          <img class="crestImg" src="assets/houses/gryff.png" alt="" aria-hidden="true">
           <span class="house-name">Gryffindor</span>
         </button>
 
         <button class="house slyth" data-spell="Serpensortia" aria-label="Slytherin">
-          <span class="crest" aria-hidden="true"></span>
+          <img class="crestImg" src="assets/houses/slyth.png" alt="" aria-hidden="true">
           <span class="house-name">Slytherin</span>
         </button>
 
         <button class="house huff" data-spell="Protego" aria-label="Hufflepuff">
-          <span class="crest" aria-hidden="true"></span>
+          <img class="crestImg" src="assets/houses/huff.png" alt="" aria-hidden="true">
           <span class="house-name">Hufflepuff</span>
         </button>
 
         <button class="house raven" data-spell="Lumos" aria-label="Ravenclaw">
-          <span class="crest" aria-hidden="true"></span>
+          <img class="crestImg" src="assets/houses/raven.png" alt="" aria-hidden="true">
           <span class="house-name">Ravenclaw</span>
         </button>
       </div>
@@ -166,51 +168,32 @@
         </div>
       </section>
 
-      <!-- DIKRAYAAAT SLIDESHOW -->
+      <!-- DIKRAYAAAT PHOTO TRAIN -->
       <section class="panel" id="dikrayaat">
         <div class="panel-head">
           <h2>Dikrayaaaat…</h2>
-          <span class="tag">Slideshow</span>
+          <span class="tag">Train</span>
         </div>
 
-        <div class="slideshow" id="slideshow">
-          <div class="slides">
-            <figure class="slide" data-pop="Twehechteek.">
-              <img src="assets/photos/01.jpeg" alt="Memory 01" />
-              <figcaption>✨</figcaption>
-            </figure>
+        <div class="train" id="train">
+          <div class="track" id="track">
+            <div class="car" data-pop="Twehechteek."><img src="assets/photos/01.jpeg" alt="Memory 01"></div>
+            <div class="car" data-pop="twehecht nl3eb f che3rek."><img src="assets/photos/02.jpeg" alt="Memory 02"></div>
+            <div class="car" data-pop="Ndirou chi glisa bhal hadi imta? ."><img src="assets/photos/03.jpeg" alt="Memory 03"></div>
+            <div class="car" data-pop="I miss these moments..."><img src="assets/photos/04.jpeg" alt="Memory 04"></div>
+            <div class="car" data-pop="Waaaa chhal ghzal uwu."><img src="assets/photos/05.jpeg" alt="Memory 05"></div>
+            <div class="car" data-pop="3iniiiik :3."><img src="assets/photos/06.jpeg" alt="Memory 06"></div>
 
-            <figure class="slide" data-pop="twehecht nl3eb f che3rek.">
-              <img src="assets/photos/02.jpeg" alt="Memory 02" />
-              <figcaption>✨</figcaption>
-            </figure>
-
-            <figure class="slide" data-pop="Ndirou chi glisa bhal hadi imta? .">
-              <img src="assets/photos/03.jpeg" alt="Memory 03" />
-              <figcaption>✨</figcaption>
-            </figure>
-
-            <figure class="slide" data-pop="I miss these moments...">
-              <img src="assets/photos/04.jpeg" alt="Memory 04" />
-              <figcaption>✨</figcaption>
-            </figure>
-
-            <figure class="slide" data-pop="Waaaa chhal ghzal uwu.">
-              <img src="assets/photos/05.jpeg" alt="Memory 05" />
-              <figcaption>✨</figcaption>
-            </figure>
-
-            <figure class="slide" data-pop="3iniiiik :3.">
-              <img src="assets/photos/06.jpeg" alt="Memory 06" />
-              <figcaption>✨</figcaption>
-            </figure>
+            <!-- duplicate set for seamless loop -->
+            <div class="car" data-pop="Twehechteek."><img src="assets/photos/01.jpeg" alt=""></div>
+            <div class="car" data-pop="twehecht nl3eb f che3rek."><img src="assets/photos/02.jpeg" alt=""></div>
+            <div class="car" data-pop="Ndirou chi glisa bhal hadi imta? ."><img src="assets/photos/03.jpeg" alt=""></div>
+            <div class="car" data-pop="I miss these moments..."><img src="assets/photos/04.jpeg" alt=""></div>
+            <div class="car" data-pop="Waaaa chhal ghzal uwu."><img src="assets/photos/05.jpeg" alt=""></div>
+            <div class="car" data-pop="3iniiiik :3."><img src="assets/photos/06.jpeg" alt=""></div>
           </div>
 
-          <button class="nav prev" id="prevSlide" aria-label="Previous">‹</button>
-          <button class="nav next" id="nextSlide" aria-label="Next">›</button>
-
-          <div class="dots" id="dots" aria-hidden="true"></div>
-          <div class="pop" id="pop" aria-hidden="true"></div>
+          <div class="trainPop" id="trainPop" aria-hidden="true"></div>
         </div>
       </section>
 
@@ -240,7 +223,7 @@
     </main>
   </div>
 
-  <!-- LETTER MODAL (envelope animation) -->
+  <!-- LETTER MODAL -->
   <div class="letter-modal" id="letterModal" aria-hidden="true">
     <div class="letter-stage">
       <button class="letter-close" id="letterClose" aria-label="Close">✕</button>
