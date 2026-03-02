@@ -4,7 +4,7 @@ function norm(str){
     .trim()
     .toLowerCase()
     .replace(/[“”"]/g, '"')
-    .replace(/[.!?]+$/g, "")     // allow punctuation at end
+    .replace(/[.!?]+$/g, "")
     .replace(/\s+/g, " ");
 }
 function rand(min,max){ return Math.random()*(max-min)+min; }
@@ -52,8 +52,8 @@ function burstSparks(x,y,count=18){
     s.className="spark";
     s.style.left=`${x}px`;
     s.style.top=`${y}px`;
-    s.style.setProperty("--dx", `${Math.round(rand(-120,120))}px`);
-    s.style.setProperty("--dy", `${Math.round(rand(-120,120))}px`);
+    s.style.setProperty("--dx", `${Math.round(rand(-140,140))}px`);
+    s.style.setProperty("--dy", `${Math.round(rand(-140,140))}px`);
     gateSparks.appendChild(s);
     setTimeout(()=>s.remove(), 950);
   }
@@ -71,13 +71,12 @@ function wrongSpellReset(){
 }
 
 async function tryPlayAudio(){
-  // audio only after user gesture; ignore failures
   try { await bgAudio.play(); } catch(e) {}
 }
 
 function openMapCinematic(){
   const rect = castBtn.getBoundingClientRect();
-  burstSparks(rect.left + rect.width/2, rect.top + rect.height/2, 28);
+  burstSparks(rect.left + rect.width/2, rect.top + rect.height/2, 32);
 
   gateError.textContent = "";
   closedMap.classList.add("fold");
@@ -94,10 +93,10 @@ function openMapCinematic(){
     map.setAttribute("aria-hidden","false");
     map.classList.add("open");
 
-    // start audio (if file exists + allowed)
+    // start audio (if allowed)
     tryPlayAudio();
 
-    // reveal ink like movie
+    // reveal map like movie
     setTimeout(()=> {
       map.classList.add("reveal");
       inkMap.style.opacity = "1";
@@ -111,7 +110,7 @@ function tryCast(){
     openMapCinematic();
   } else {
     const r = spellInput.getBoundingClientRect();
-    burstSparks(r.left + r.width/2, r.top + r.height/2, 10);
+    burstSparks(r.left + r.width/2, r.top + r.height/2, 12);
     wrongSpellReset();
   }
 }
@@ -212,14 +211,23 @@ function spawnWandSpark(x,y){
   s.className="wspark";
   s.style.left=`${x}px`;
   s.style.top=`${y}px`;
-  s.style.setProperty("--dx", `${Math.round(rand(-18,18))}px`);
-  s.style.setProperty("--dy", `${Math.round(rand(-18,18))}px`);
+  s.style.setProperty("--dx", `${Math.round(rand(-22,22))}px`);
+  s.style.setProperty("--dy", `${Math.round(rand(-22,22))}px`);
   sparkLayer.appendChild(s);
   setTimeout(()=>s.remove(), 700);
 }
+
 window.addEventListener("mousemove",(e)=>{
   if (map.getAttribute("aria-hidden")==="true") return;
-  if (Math.random() < 0.33) spawnWandSpark(e.clientX, e.clientY);
+  if (Math.random() < 0.28) spawnWandSpark(e.clientX, e.clientY);
+});
+
+// Extra sparkles when hovering letter buttons
+document.querySelectorAll(".cap").forEach(btn=>{
+  btn.addEventListener("mousemove",(e)=>{
+    if (map.getAttribute("aria-hidden")==="true") return;
+    if (Math.random() < 0.35) spawnWandSpark(e.clientX, e.clientY);
+  });
 });
 
 // ---------- house spell bursts ----------
@@ -231,8 +239,13 @@ function castSpellAt(x,y,word){
   burst.innerHTML = `<div class="spell-word">${word}</div><div class="spell-ring"></div>`;
   spellLayer.appendChild(burst);
   setTimeout(()=>burst.remove(), 1200);
-  for(let i=0;i<10;i++) spawnWandSpark(x+rand(-10,10), y+rand(-10,10));
+
+  // richer magic scatter
+  for(let i=0;i<16;i++){
+    spawnWandSpark(x+rand(-16,16), y+rand(-16,16));
+  }
 }
+
 document.querySelectorAll(".house").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     const r=btn.getBoundingClientRect();
@@ -248,6 +261,12 @@ document.querySelectorAll(".car").forEach(car => {
     trainPop.classList.remove("show");
     void trainPop.offsetWidth;
     trainPop.classList.add("show");
+
+    // tiny sparkle burst for "magical pop"
+    const r = car.getBoundingClientRect();
+    const cx = r.left + r.width/2;
+    const cy = r.top + 20;
+    for(let i=0;i<8;i++) spawnWandSpark(cx+rand(-16,16), cy+rand(-10,10));
   });
 });
 
